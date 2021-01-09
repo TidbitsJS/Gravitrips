@@ -4,14 +4,12 @@ export class Grid extends Component {
   state = {
     currentPlayer: {
       play: true,
-      color: "radial-gradient(circle at 100px 100px, #ff1616, #ff4010)",
     },
     nextPlayer: {
       play: false,
-      color: "radial-gradient(circle at 100px 100px, skyblue, blue)",
     },
 
-    board: Array.from(Array(this.props.rows), () =>
+    board: Array.from(Array(this.props.columns), () =>
       Array.from({ length: this.props.rows }, (_, i) => 0)
     ),
   };
@@ -20,27 +18,27 @@ export class Grid extends Component {
     console.log(e.target.style.background === "");
     if (e.target.style.background === "") {
       this.state.currentPlayer.play
-        ? (e.target.style.background = "red")
-        : (e.target.style.background = this.state.nextPlayer.color);
+        ? (e.target.style.background = this.props.firstPlayerColor)
+        : (e.target.style.background = this.props.secondPlayerColor);
     }
     this.setState({ currentPlayer: { play: !this.state.currentPlayer.play } });
   };
 
   render() {
-    console.log(this.state.board);
-    const gridBoardTop = [...new Array(this.props.rows)].map(
+    console.log(this.props.firstPlayerName, this.props.secondPlayerName);
+    const gridBoardTop = [...new Array(this.props.columns)].map(
       (girdRow, index) => (
         <div
           className={`cell row-top col-${index} top`}
           key={index + `cell row-top col-${index} top`}
           onMouseOver={(e) =>
-            (e.target.style.color = this.state.currentPlayer.color)
+            (e.target.style.color = this.props.firstPlayerColor)
           }
         >
           <div
             className="ball"
             onMouseOver={(e) =>
-              (e.target.style.background = this.state.currentPlayer.color)
+              (e.target.style.background = this.props.firstPlayerColor)
             }
             onMouseOut={(e) => (e.target.style.background = "#fff")}
           ></div>
@@ -69,7 +67,7 @@ export class Grid extends Component {
         <div
           className="game-board"
           style={{
-            gridTemplateColumns: `repeat(${this.props.rows}, 1fr)`,
+            gridTemplateColumns: `repeat(${this.props.columns}, 1fr)`,
             gridTemplateRows: `repeat(${this.props.rows}, 1fr)`,
           }}
         >

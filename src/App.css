@@ -7,10 +7,90 @@
   flex-direction: column;
 }
 
-input {
-  margin-top: 1rem;
+.Grid-UserInput {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  margin-top: 2rem;
+  min-width: 500px;
 }
 
-button {
-  margin-top: 1rem;
+.Grid-Row-UserInput {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  margin: 1rem;
+  flex: 1;
+}
+
+.Grid-Col-UserInput {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  margin: 1rem;
+  flex: 1;
+}
+
+.Grid-Row-UserInput p,
+.Grid-Col-UserInput p {
+  margin-bottom: 0;
+
+  margin-right: 1rem;
+}
+
+.Grid-ColorChoice {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  width: 500px;
+}
+
+.Grid-FirstPlayer-ColorChoice,
+.Grid-SecondPlayer-ColorChoice {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  margin: 1rem;
+
+  flex: 1;
+}
+
+.Grid-FirstPlayer-ColorChoice p,
+.Grid-SecondPlayer-ColorChoice p {
+  margin-bottom: 0;
+
+  margin-right: 1rem;
+}
+
+.Grid-NameInput {
+  display: flex;
+  flex-direction: column;
+
+  width: 500px;
+}
+
+.Grid-FirstName-Input,
+.Grid-SecondName-Input {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.Grid-FirstName-Input p,
+.Grid-SecondName-Input p {
+  margin-right: 1rem;
+  margin-bottom: 0;
+
+  width: 100px;
 }
