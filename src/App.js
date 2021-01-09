@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import Grid from "./components/Grid";
 import Welcome from "./components/Welcome";
 import store from "./Redux/Store";
+import "./Styles/game.css";
 
 import "./App.css";
 
