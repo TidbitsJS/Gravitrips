@@ -23,13 +23,10 @@ export class Welcome extends Component {
   };
 
   gridRowInput = (value) => {
-    console.log(value);
-
     this.setState({ rows: value });
   };
 
   gridColInput = (value) => {
-    console.log(value);
     this.setState({ columns: value });
   };
 
@@ -130,7 +127,7 @@ export class Welcome extends Component {
               <p>Enter Rows: </p>
               <InputNumber
                 min={4}
-                max={10}
+                max={20}
                 defaultValue={4}
                 onChange={this.gridRowInput}
               />
@@ -139,7 +136,7 @@ export class Welcome extends Component {
               <p>Enter Columns: </p>
               <InputNumber
                 min={4}
-                max={10}
+                max={20}
                 defaultValue={4}
                 onChange={this.gridColInput}
               />

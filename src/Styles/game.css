@@ -28,10 +28,10 @@ h1 {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(7, 1fr);
-  min-height: 700px;
-  min-width: 700px;
-
-  zoom: 0.71;
+  /* min-height: 700px; */
+  /* min-width: 700px; */
+  justify-items: center;
+  margin-top: 5rem;
 }
 
 .cell {
@@ -41,16 +41,24 @@ h1 {
   background: #4370f1;
   background: #000;
 
-  height: 100px;
-  width: 100px;
+  height: 85px;
+  width: 85px;
 }
 
 .ball {
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
 
   border-radius: 50%;
   background: #fff;
+}
+
+.ball:not(.row-top).win {
+  background: linear-gradient(45deg, #4370f1, transparent);
+}
+
+.ball:not(.row-top).win {
+  background: linear-gradient(45deg, #4370f1, transparent);
 }
 
 .top {
@@ -77,6 +85,7 @@ h1 {
   text-transform: uppercase;
 
   outline: none;
+  margin-bottom: 1rem;
 }
 
 .status {

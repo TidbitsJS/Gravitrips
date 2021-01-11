@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { checkStatusOfGame } from "./Checkmate";
 
 export class Grid extends Component {
   state = {
@@ -9,23 +10,52 @@ export class Grid extends Component {
       play: false,
     },
 
-    board: Array.from(Array(this.props.columns), () =>
-      Array.from({ length: this.props.rows }, (_, i) => 0)
+    gameIsLive: true,
+
+    board: Array.from(Array(this.props.rows), () =>
+      Array.from({ length: this.props.columns }, (_, i) => 0)
     ),
   };
 
   handleCellClick = (e, rowIndex, colIndex) => {
     console.log(e.target.style.background === "");
-    if (e.target.style.background === "") {
-      this.state.currentPlayer.play
-        ? (e.target.style.background = this.props.firstPlayerColor)
-        : (e.target.style.background = this.props.secondPlayerColor);
+    if (this.state.gameIsLive) {
+      if (e.target.style.background === "") {
+        let copyBoard = this.state.board;
+        let PlayerID;
+
+        this.state.currentPlayer.play
+          ? (copyBoard[rowIndex][colIndex] = 1)
+          : (copyBoard[rowIndex][colIndex] = 2);
+
+        this.state.currentPlayer.play
+          ? (e.target.style.background = this.props.firstPlayerColor)
+          : (e.target.style.background = this.props.secondPlayerColor);
+
+        this.state.currentPlayer.play ? (PlayerID = 1) : (PlayerID = 2);
+
+        let gameStatus = checkStatusOfGame(
+          this.state.board,
+          rowIndex,
+          colIndex,
+          PlayerID,
+          e.target,
+          this.props.rows,
+          this.props.columns
+        );
+
+        gameStatus
+          ? this.setState({ gameIsLive: false })
+          : this.setState({ gameIsLive: true });
+        this.setState({
+          currentPlayer: { play: !this.state.currentPlayer.play },
+          board: [...copyBoard],
+        });
+      }
     }
-    this.setState({ currentPlayer: { play: !this.state.currentPlayer.play } });
   };
 
   render() {
-    console.log(this.props.firstPlayerName, this.props.secondPlayerName);
     const gridBoardTop = [...new Array(this.props.columns)].map(
       (girdRow, index) => (
         <div
@@ -46,7 +76,7 @@ export class Grid extends Component {
       )
     );
 
-    let board = this.state.board.map((row, ri) => {
+    let board = Array.from(this.state.board).map((row, ri) => {
       let cells = row.map((cell, ci) => (
         <div
           className={`cell row-${ri} col-${ci} top-border`}
@@ -71,7 +101,7 @@ export class Grid extends Component {
             gridTemplateRows: `repeat(${this.props.rows}, 1fr)`,
           }}
         >
-          {gridBoardTop}
+          {/* {gridBoardTop} */}
           {board}
         </div>
         <div className="footer">
