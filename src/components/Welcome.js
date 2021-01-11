@@ -9,6 +9,7 @@ export class Welcome extends Component {
   state = {
     rows: 7,
     columns: 7,
+    dots: 4,
     start: false,
     firstPlayer: {
       name: "Mr. Red",
@@ -28,6 +29,10 @@ export class Welcome extends Component {
 
   gridColInput = (value) => {
     this.setState({ columns: value });
+  };
+
+  gridDotInput = (value) => {
+    this.setState({ dots: value });
   };
 
   handleStart = () => {
@@ -106,8 +111,18 @@ export class Welcome extends Component {
         display: "inline-block",
         cursor: "pointer",
       },
-      popover: {
+      popoverFirst: {
         position: "absolute",
+        top: "-100%",
+        left: "-10%",
+        transform: "translate(-100%, -40%)",
+        zIndex: "2",
+      },
+      popoverSecond: {
+        position: "absolute",
+        top: "-100%",
+        left: "40%",
+        transform: "translate(100%, -40%)",
         zIndex: "2",
       },
       cover: {
@@ -122,8 +137,14 @@ export class Welcome extends Component {
     if (!this.state.start) {
       return (
         <div className="App">
+          <div className="head-title glass">
+            <h1 className="cssanimation sequence lePushReleaseFrom">
+              {" "}
+              Connect the Dots{" "}
+            </h1>
+          </div>
           <div className="Grid-UserInput">
-            <div className="Grid-Row-UserInput">
+            <div className="Grid-Row-UserInput glass">
               <p>Enter Rows: </p>
               <InputNumber
                 min={4}
@@ -132,7 +153,16 @@ export class Welcome extends Component {
                 onChange={this.gridRowInput}
               />
             </div>
-            <div className="Grid-Col-UserInput">
+            <div className="Grid-dot-UserInput glass">
+              <p>Enter Dots: </p>
+              <InputNumber
+                min={4}
+                max={20}
+                defaultValue={4}
+                onChange={this.gridDotInput}
+              />
+            </div>
+            <div className="Grid-Col-UserInput glass">
               <p>Enter Columns: </p>
               <InputNumber
                 min={4}
@@ -144,14 +174,14 @@ export class Welcome extends Component {
           </div>
 
           <div className="Grid-NameInput">
-            <div className="Grid-FirstName-Input">
+            <div className="Grid-FirstName-Input glass">
               <p>Player 1st:</p>
               <Input
                 placeholder="Enter First Player Name"
                 onChange={(e) => this.onFirstPlayerNameChange(e)}
               />
             </div>
-            <div className="Grid-SecondName-Input">
+            <div className="Grid-SecondName-Input glass">
               <p>Player 2nd:</p>
               <Input
                 placeholder="Enter Second Player Name"
@@ -161,13 +191,13 @@ export class Welcome extends Component {
           </div>
 
           <div className="Grid-ColorChoice">
-            <div className="Grid-FirstPlayer-ColorChoice">
+            <div className="Grid-FirstPlayer-ColorChoice glass">
               <p>FirstPlayer Color:</p>
               <div style={styles.swatch} onClick={this.handleFirstClick}>
                 <div style={styles.firstColor} />
               </div>
               {this.state.displayFirstColorPicker ? (
-                <div style={styles.popover}>
+                <div style={styles.popoverFirst}>
                   <div style={styles.cover} onClick={this.handleFirstClose} />
                   <SketchPicker
                     color={this.state.firstPlayer.color}
@@ -177,13 +207,13 @@ export class Welcome extends Component {
               ) : null}
             </div>
 
-            <div className="Grid-SecondPlayer-ColorChoice">
+            <div className="Grid-SecondPlayer-ColorChoice glass">
               <p>SecondPlayer Color:</p>
               <div style={styles.swatch} onClick={this.handleSecondClick}>
                 <div style={styles.secondColor} />
               </div>
               {this.state.displaySecondColorPicker ? (
-                <div style={styles.popover}>
+                <div style={styles.popoverSecond}>
                   <div style={styles.cover} onClick={this.handleSecondClose} />
                   <SketchPicker
                     color={this.state.secondPlayer.color}
@@ -195,7 +225,7 @@ export class Welcome extends Component {
           </div>
 
           <Button
-            style={{ marginTop: 10 }}
+            style={{ marginTop: 10, marginBottom: 13 }}
             type="primary"
             onClick={this.handleStart}
           >
