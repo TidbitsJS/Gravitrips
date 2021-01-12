@@ -11,10 +11,6 @@ const checkWinningCells = (winnningCells, winningDimensions, cell) => {
   return true;
 };
 
-const getCell = (cell, row, column) => {
-  console.log("Get Cell", cell, row, column);
-};
-
 export const checkStatusOfGame = (
   board,
   rowIndex,
@@ -22,16 +18,14 @@ export const checkStatusOfGame = (
   player,
   cell,
   rows,
-  columns,
-  cellBoard
+  columns
 ) => {
   console.log("check status", board, rowIndex, colIndex, cell);
-  console.log("Cell board", cellBoard, cellBoard[rowIndex][colIndex]);
 
   /* Check Horizontally */
 
   let winnningCells = [board[rowIndex][colIndex]];
-  let winningDimensions = [{ row: rowIndex, col: colIndex }];
+  let winningDimensions = { [`${rowIndex}-${colIndex}`]: true };
   let rowToCheck = rowIndex;
   let colToCheck = colIndex - 1;
 
@@ -40,7 +34,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
-      winningDimensions.push({ row: rowToCheck, col: colToCheck });
+      winningDimensions[[`${rowToCheck}-${colToCheck}`]] = true;
       colToCheck--;
     } else {
       break;
@@ -54,7 +48,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
-      winningDimensions.push({ row: rowToCheck, col: colToCheck });
+      winningDimensions[[`${rowToCheck}-${colToCheck}`]] = true;
       colToCheck++;
     } else {
       break;
@@ -77,7 +71,7 @@ export const checkStatusOfGame = (
   /* Check Vertically */
 
   winnningCells = [board[rowIndex][colIndex]];
-  winningDimensions = [{ row: rowIndex, col: colIndex }];
+  winningDimensions = { [`${rowIndex}-${colIndex}`]: true };
   rowToCheck = rowIndex - 1;
   colToCheck = colIndex;
 
@@ -86,7 +80,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
-      winningDimensions.push({ row: rowToCheck, col: colToCheck });
+      winningDimensions[[`${rowToCheck}-${colToCheck}`]] = true;
       rowToCheck--;
     } else {
       break;
@@ -100,7 +94,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
-      winningDimensions.push({ row: rowToCheck, col: colToCheck });
+      winningDimensions[[`${rowToCheck}-${colToCheck}`]] = true;
       rowToCheck++;
     } else {
       break;
@@ -118,7 +112,7 @@ export const checkStatusOfGame = (
   /* Check diagonally right */
 
   winnningCells = [board[rowIndex][colIndex]];
-  winningDimensions = [{ row: rowIndex, col: colIndex }];
+  winningDimensions = { [`${rowIndex}-${colIndex}`]: true };
   rowToCheck = rowIndex - 1;
   colToCheck = colIndex - 1;
 
@@ -127,7 +121,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
-      winningDimensions.push({ row: rowToCheck, col: colToCheck });
+      winningDimensions[[`${rowToCheck}-${colToCheck}`]] = true;
       rowToCheck--;
       colToCheck--;
     } else {
@@ -143,7 +137,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
-      winningDimensions.push({ row: rowToCheck, col: colToCheck });
+      winningDimensions[[`${rowToCheck}-${colToCheck}`]] = true;
       rowToCheck++;
       colToCheck++;
     } else {
@@ -162,7 +156,7 @@ export const checkStatusOfGame = (
   /* Check diagonally left */
 
   winnningCells = [board[rowIndex][colIndex]];
-  winningDimensions = [{ row: rowIndex, col: colIndex }];
+  winningDimensions = { [`${rowIndex}-${colIndex}`]: true };
   rowToCheck = rowIndex + 1;
   colToCheck = colIndex - 1;
 
@@ -171,7 +165,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
-      winningDimensions.push({ row: rowToCheck, col: colToCheck });
+      winningDimensions[[`${rowToCheck}-${colToCheck}`]] = true;
       rowToCheck++;
       colToCheck--;
     } else {
@@ -187,7 +181,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
-      winningDimensions.push({ row: rowToCheck, col: colToCheck });
+      winningDimensions[[`${rowToCheck}-${colToCheck}`]] = true;
       rowToCheck--;
       colToCheck++;
     } else {
@@ -202,5 +196,5 @@ export const checkStatusOfGame = (
       winningDimensions: winningDimensions,
       WonPlayer: player,
     };
-  else return { isWin: false, winningDimensions: [], wonPlayer: 0 };
+  else return { isWin: false, winningDimensions: {}, wonPlayer: 0 };
 };

@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { checkStatusOfGame } from "./Checkmate";
 
-let cellBoard;
-
 export class Grid extends Component {
   state = {
     currentPlayer: {
@@ -14,8 +12,9 @@ export class Grid extends Component {
       PlayerID: 2,
     },
 
+    gameNumber: 0,
     gameIsLive: true,
-    winningDimensions: [],
+    winningCells: {},
 
     board: Array.from(Array(this.props.rows), () =>
       Array.from({ length: this.props.columns }, (_, i) => 0)
@@ -46,8 +45,7 @@ export class Grid extends Component {
           PlayerID,
           e.target,
           this.props.rows,
-          this.props.columns,
-          cellBoard
+          this.props.columns
         );
 
         console.log(gameStatus);
@@ -57,7 +55,7 @@ export class Grid extends Component {
         if (isWin) {
           this.setState({
             gameIsLive: false,
-            winningDimensions: winningDimensions,
+            winningCells: winningDimensions,
           });
           if (wonPlayer === 1) {
             console.log(this.props.firstPlayerName + " has won the game");
@@ -76,8 +74,20 @@ export class Grid extends Component {
     }
   };
 
+  handleReset = () => {
+    let number = this.state.gameNumber + 1;
+    this.setState({
+      gameNumber: number,
+      gameIsLive: true,
+      winningCells: {},
+      board: Array.from(Array(this.props.rows), () =>
+        Array.from({ length: this.props.columns }, (_, i) => 0)
+      ),
+    });
+  };
+
   render() {
-    console.log(this.state.winningDimensions);
+    console.log(this.state.winningCells);
     const gridBoardTop = [...new Array(this.props.columns)].map(
       (girdRow, index) => (
         <div
@@ -98,11 +108,16 @@ export class Grid extends Component {
       )
     );
 
-    cellBoard = Array.from(this.state.board).map((row, ri) => {
+    let cellBoard = Array.from(this.state.board).map((row, ri) => {
       let cells = row.map((cell, ci) => (
         <div
           className={`cell row-${ri} col-${ci} top-border`}
           key={`cell row-${ri} col-${ci} top-border`}
+          style={{
+            background: this.state.winningCells[ri + "-" + ci]
+              ? "linear-gradient(45deg, #4370f1, #fff)"
+              : undefined,
+          }}
         >
           <div
             key={`cell row-${ri} col-${ci} top-border-ball`}
@@ -117,6 +132,7 @@ export class Grid extends Component {
     return (
       <div className="Game-Grid-Container">
         <div
+          key={this.state.gameNumber}
           className="game-board"
           style={{
             gridTemplateColumns: `repeat(${this.props.columns}, 1fr)`,
@@ -127,7 +143,12 @@ export class Grid extends Component {
           {cellBoard}
         </div>
         <div className="footer">
-          <button className="reset hvr-sweep-to-right">Reset</button>
+          <button
+            className="reset hvr-sweep-to-right"
+            onClick={this.handleReset}
+          >
+            Reset
+          </button>
           <span className="status"></span>
         </div>
       </div>
