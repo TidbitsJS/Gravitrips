@@ -3,7 +3,7 @@ import Welcome from "./components/Welcome";
 
 import "./Styles/game.css";
 import "./Animations/cssanimation.min.css";
-import "./Animations/letteranimation.min.js";
+import "./Animations/letteranimation";
 import "./App.css";
 
 function App() {

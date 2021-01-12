@@ -1,16 +1,21 @@
 import React, { Component } from "react";
 import { checkStatusOfGame } from "./Checkmate";
 
+let cellBoard;
+
 export class Grid extends Component {
   state = {
     currentPlayer: {
       play: true,
+      PlayerID: 1,
     },
     nextPlayer: {
       play: false,
+      PlayerID: 2,
     },
 
     gameIsLive: true,
+    winningDimensions: [],
 
     board: Array.from(Array(this.props.rows), () =>
       Array.from({ length: this.props.columns }, (_, i) => 0)
@@ -41,12 +46,28 @@ export class Grid extends Component {
           PlayerID,
           e.target,
           this.props.rows,
-          this.props.columns
+          this.props.columns,
+          cellBoard
         );
 
-        gameStatus
-          ? this.setState({ gameIsLive: false })
-          : this.setState({ gameIsLive: true });
+        console.log(gameStatus);
+
+        const { isWin, winningDimensions, wonPlayer } = gameStatus;
+
+        if (isWin) {
+          this.setState({
+            gameIsLive: false,
+            winningDimensions: winningDimensions,
+          });
+          if (wonPlayer === 1) {
+            console.log(this.props.firstPlayerName + " has won the game");
+          } else {
+            console.log(this.props.secondPlayerName + " has won the game");
+          }
+        } else {
+          this.setState({ gameIsLive: true });
+        }
+
         this.setState({
           currentPlayer: { play: !this.state.currentPlayer.play },
           board: [...copyBoard],
@@ -56,6 +77,7 @@ export class Grid extends Component {
   };
 
   render() {
+    console.log(this.state.winningDimensions);
     const gridBoardTop = [...new Array(this.props.columns)].map(
       (girdRow, index) => (
         <div
@@ -76,7 +98,7 @@ export class Grid extends Component {
       )
     );
 
-    let board = Array.from(this.state.board).map((row, ri) => {
+    cellBoard = Array.from(this.state.board).map((row, ri) => {
       let cells = row.map((cell, ci) => (
         <div
           className={`cell row-${ri} col-${ci} top-border`}
@@ -102,7 +124,7 @@ export class Grid extends Component {
           }}
         >
           {/* {gridBoardTop} */}
-          {board}
+          {cellBoard}
         </div>
         <div className="footer">
           <button className="reset hvr-sweep-to-right">Reset</button>

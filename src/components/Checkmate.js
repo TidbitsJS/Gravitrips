@@ -1,8 +1,18 @@
-const checkWinningCells = (winnningCells) => {
+const checkWinningCells = (winnningCells, winningDimensions, cell) => {
   if (winnningCells.length < 4) return false;
 
-  console.log("Win Win Win");
+  console.log("WinningDimensions", winningDimensions);
+
+  let parent = cell.parentNode;
+
+  parent.style.background = "#fff";
+
+  console.log("Win Win Win", cell.parentNode);
   return true;
+};
+
+const getCell = (cell, row, column) => {
+  console.log("Get Cell", cell, row, column);
 };
 
 export const checkStatusOfGame = (
@@ -12,13 +22,16 @@ export const checkStatusOfGame = (
   player,
   cell,
   rows,
-  columns
+  columns,
+  cellBoard
 ) => {
   console.log("check status", board, rowIndex, colIndex, cell);
+  console.log("Cell board", cellBoard, cellBoard[rowIndex][colIndex]);
 
   /* Check Horizontally */
 
   let winnningCells = [board[rowIndex][colIndex]];
+  let winningDimensions = [{ row: rowIndex, col: colIndex }];
   let rowToCheck = rowIndex;
   let colToCheck = colIndex - 1;
 
@@ -27,6 +40,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
+      winningDimensions.push({ row: rowToCheck, col: colToCheck });
       colToCheck--;
     } else {
       break;
@@ -40,18 +54,30 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
+      winningDimensions.push({ row: rowToCheck, col: colToCheck });
       colToCheck++;
     } else {
       break;
     }
   }
 
-  let isWinningCombo = checkWinningCells(winnningCells);
-  if (isWinningCombo) return true;
+  let isWinningCombo = checkWinningCells(
+    winnningCells,
+    winningDimensions,
+    cell
+  );
+
+  if (isWinningCombo)
+    return {
+      isWin: true,
+      winningDimensions: winningDimensions,
+      WonPlayer: player,
+    };
 
   /* Check Vertically */
 
   winnningCells = [board[rowIndex][colIndex]];
+  winningDimensions = [{ row: rowIndex, col: colIndex }];
   rowToCheck = rowIndex - 1;
   colToCheck = colIndex;
 
@@ -60,6 +86,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
+      winningDimensions.push({ row: rowToCheck, col: colToCheck });
       rowToCheck--;
     } else {
       break;
@@ -73,18 +100,25 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
+      winningDimensions.push({ row: rowToCheck, col: colToCheck });
       rowToCheck++;
     } else {
       break;
     }
   }
 
-  isWinningCombo = checkWinningCells(winnningCells);
-  if (isWinningCombo) return true;
+  isWinningCombo = checkWinningCells(winnningCells, winningDimensions, cell);
+  if (isWinningCombo)
+    return {
+      isWin: true,
+      winningDimensions: winningDimensions,
+      WonPlayer: player,
+    };
 
   /* Check diagonally right */
 
   winnningCells = [board[rowIndex][colIndex]];
+  winningDimensions = [{ row: rowIndex, col: colIndex }];
   rowToCheck = rowIndex - 1;
   colToCheck = colIndex - 1;
 
@@ -93,6 +127,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
+      winningDimensions.push({ row: rowToCheck, col: colToCheck });
       rowToCheck--;
       colToCheck--;
     } else {
@@ -108,6 +143,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
+      winningDimensions.push({ row: rowToCheck, col: colToCheck });
       rowToCheck++;
       colToCheck++;
     } else {
@@ -115,12 +151,18 @@ export const checkStatusOfGame = (
     }
   }
 
-  isWinningCombo = checkWinningCells(winnningCells);
-  if (isWinningCombo) return true;
+  isWinningCombo = checkWinningCells(winnningCells, winningDimensions, cell);
+  if (isWinningCombo)
+    return {
+      isWin: true,
+      winningDimensions: winningDimensions,
+      WonPlayer: player,
+    };
 
   /* Check diagonally left */
 
   winnningCells = [board[rowIndex][colIndex]];
+  winningDimensions = [{ row: rowIndex, col: colIndex }];
   rowToCheck = rowIndex + 1;
   colToCheck = colIndex - 1;
 
@@ -129,6 +171,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
+      winningDimensions.push({ row: rowToCheck, col: colToCheck });
       rowToCheck++;
       colToCheck--;
     } else {
@@ -144,6 +187,7 @@ export const checkStatusOfGame = (
 
     if (cellToCheck === player) {
       winnningCells.push(cellToCheck);
+      winningDimensions.push({ row: rowToCheck, col: colToCheck });
       rowToCheck--;
       colToCheck++;
     } else {
@@ -151,6 +195,12 @@ export const checkStatusOfGame = (
     }
   }
 
-  isWinningCombo = checkWinningCells(winnningCells);
-  if (isWinningCombo) return true;
+  isWinningCombo = checkWinningCells(winnningCells, winningDimensions, cell);
+  if (isWinningCombo)
+    return {
+      isWin: isWinningCombo,
+      winningDimensions: winningDimensions,
+      WonPlayer: player,
+    };
+  else return { isWin: false, winningDimensions: [], wonPlayer: 0 };
 };
