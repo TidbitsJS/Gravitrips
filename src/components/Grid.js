@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Modal } from "antd";
+import Confetti from "react-confetti";
+import { useWindowSize } from "react-use";
 import { checkStatusOfGame } from "./Checkmate";
 
 export class Grid extends Component {
@@ -120,6 +122,8 @@ export class Grid extends Component {
   };
 
   render() {
+    const { width, height } = useWindowSize;
+
     const gridBoardTop = [...new Array(this.props.columns)].map(
       (girdRow, index) => (
         <div
@@ -210,6 +214,10 @@ export class Grid extends Component {
           : this.state.winInfo.whichPlayer === -1
           ? this.showTieModal()
           : null}
+
+        {this.state.gameIsLive ? null : (
+          <Confetti width={width} height={height} />
+        )}
       </div>
     );
   }
