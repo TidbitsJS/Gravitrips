@@ -96,15 +96,34 @@ export class Grid extends Component {
     }
   };
 
-  showWinModal = (name) => {
+  showWinModal = (winner, loser) => {
     Modal.success({
-      content: `${name} has won the Game`,
+      title: <h3>Congrats {winner}</h3>,
+      content: (
+        <div>
+          <p>{winner} has outsmarted the opponent</p>
+          <br />
+          <br />
+          <br />
+          <p>Better luck next time {loser}</p>
+        </div>
+      ),
     });
   };
 
   showTieModal = () => {
     Modal.info({
-      content: "Well Played. It's a tie.",
+      title: <h3>Dead Heat</h3>,
+      content: (
+        <div>
+          <p>Well Played players</p>
+          <p>It's a Tie</p>
+          <br />
+          <br />
+          <br />
+          <p>How about a rematch?</p>
+        </div>
+      ),
     });
   };
 
@@ -208,9 +227,15 @@ export class Grid extends Component {
         </div>
 
         {this.state.winInfo.whichPlayer === 1
-          ? this.showWinModal(this.props.firstPlayerName)
+          ? this.showWinModal(
+              this.props.firstPlayerName,
+              this.props.secondPlayerName
+            )
           : this.state.winInfo.whichPlayer === 2
-          ? this.showWinModal(this.props.secondPlayerName)
+          ? this.showWinModal(
+              this.props.secondPlayerName,
+              this.props.firstPlayerName
+            )
           : this.state.winInfo.whichPlayer === -1
           ? this.showTieModal()
           : null}
