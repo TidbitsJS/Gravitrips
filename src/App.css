@@ -130,3 +130,40 @@
   width: 100px;
   color: #000;
 }
+
+@media (max-width: 1100px) {
+  .head-title {
+    font-size: 2rem;
+  }
+
+  .Grid-UserInput {
+    width: 85%;
+  }
+}
+
+@media (max-width: 780px) {
+  .head-title {
+    font-size: 1.3rem;
+  }
+
+  .Grid-UserInput {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .Grid-ColorChoice {
+    flex-direction: column;
+    width: 90%;
+  }
+}
+
+@media (max-width: 560px) {
+  .head-title {
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .Grid-NameInput {
+    width: 90%;
+  }
+}

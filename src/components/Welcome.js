@@ -138,7 +138,7 @@ export class Welcome extends Component {
       return (
         <div className="App">
           <div className="head-title glass">
-            <h1 className="cssanimation sequence lePushReleaseFrom">
+            <h1 className="cssanimation sequence effect3d lePushReleaseFrom">
               {" "}
               Connect the Dots{" "}
             </h1>

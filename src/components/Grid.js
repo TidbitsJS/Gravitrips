@@ -22,7 +22,6 @@ export class Grid extends Component {
   };
 
   handleCellClick = (e, rowIndex, colIndex) => {
-    console.log(e.target.style.background === "");
     if (this.state.gameIsLive) {
       if (e.target.style.background === "") {
         let copyBoard = this.state.board;
@@ -50,17 +49,19 @@ export class Grid extends Component {
 
         console.log(gameStatus);
 
-        const { isWin, winningDimensions, wonPlayer } = gameStatus;
+        const { isWin, winningDimensions, WonPlayer } = gameStatus;
 
         if (isWin) {
           this.setState({
             gameIsLive: false,
             winningCells: winningDimensions,
           });
-          if (wonPlayer === 1) {
+          if (WonPlayer === 1) {
             console.log(this.props.firstPlayerName + " has won the game");
-          } else {
+          } else if (WonPlayer === 2) {
             console.log(this.props.secondPlayerName + " has won the game");
+          } else {
+            console.log("Game is a tie");
           }
         } else {
           this.setState({ gameIsLive: true });
@@ -131,6 +132,23 @@ export class Grid extends Component {
 
     return (
       <div className="Game-Grid-Container">
+        <div className="Player-Turn">
+          <p>
+            {this.state.currentPlayer.play
+              ? `${this.props.firstPlayerName}'s Turn`
+              : `${this.props.secondPlayerName}'s Turn`}
+            <i
+              className="fas fa-circle"
+              style={{
+                color: this.state.currentPlayer.play
+                  ? this.props.firstPlayerColor
+                  : this.props.secondPlayerColor,
+                marginLeft: 10,
+              }}
+            ></i>
+          </p>
+        </div>
+
         <div
           key={this.state.gameNumber}
           className="game-board"
@@ -140,8 +158,10 @@ export class Grid extends Component {
           }}
         >
           {/* {gridBoardTop} */}
+
           {cellBoard}
         </div>
+
         <div className="footer">
           <button
             className="reset hvr-sweep-to-right"

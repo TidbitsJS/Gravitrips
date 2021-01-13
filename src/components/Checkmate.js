@@ -196,5 +196,14 @@ export const checkStatusOfGame = (
       winningDimensions: winningDimensions,
       WonPlayer: player,
     };
-  else return { isWin: false, winningDimensions: {}, wonPlayer: 0 };
+
+  for (const row of board) {
+    for (const column of row) {
+      if (column !== 1 && column !== 2) {
+        return { isWin: false, winningDimensions: {}, wonPlayer: 0 };
+      }
+    }
+  }
+
+  return { isWin: true, winningDimensions: {}, wonPlayer: -1 };
 };

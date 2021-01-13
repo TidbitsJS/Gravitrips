@@ -22,16 +22,24 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  flex-wrap: wrap;
+  flex-shrink: 1;
+}
+
+.Player-Turn {
+  margin-top: 1rem;
+  font-size: 1.3rem;
 }
 
 .game-board {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(7, 1fr);
-  /* min-height: 700px; */
-  /* min-width: 700px; */
+
   justify-items: center;
-  margin-top: 2rem;
+
+  box-shadow: -1px 2px 5px rgba(0, 0, 0, 0.2), -1px -1px 5px rgba(0, 0, 0, 0.2);
 }
 
 .cell {
@@ -86,19 +94,6 @@ h1 {
 
   outline: none;
   margin-bottom: 1rem;
-}
-
-.status {
-  display: block;
-  font-size: 20px;
-}
-
-.player-turn {
-  font-size: 15px;
-  margin-left: 5px;
-
-  letter-spacing: 1px;
-  text-transform: capitalize;
 }
 
 .hvr-sweep-to-right {
