@@ -20,8 +20,6 @@ export const checkStatusOfGame = (
   rows,
   columns
 ) => {
-  console.log("check status", board, rowIndex, colIndex, cell);
-
   /* Check Horizontally */
 
   let winnningCells = [board[rowIndex][colIndex]];

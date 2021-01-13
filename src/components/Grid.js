@@ -1,18 +1,20 @@
 import React, { Component } from "react";
+import { Modal } from "antd";
 import { checkStatusOfGame } from "./Checkmate";
 
 export class Grid extends Component {
   state = {
     currentPlayer: {
       play: true,
-      PlayerID: 1,
     },
     nextPlayer: {
       play: false,
-      PlayerID: 2,
     },
 
     gameNumber: 0,
+    winInfo: {
+      whichPlayer: 0,
+    },
     gameIsLive: true,
     winningCells: {},
 
@@ -47,8 +49,6 @@ export class Grid extends Component {
           this.props.columns
         );
 
-        console.log(gameStatus);
-
         const { isWin, winningDimensions, WonPlayer } = gameStatus;
 
         if (isWin) {
@@ -56,29 +56,61 @@ export class Grid extends Component {
             gameIsLive: false,
             winningCells: winningDimensions,
           });
+
           if (WonPlayer === 1) {
             console.log(this.props.firstPlayerName + " has won the game");
+            this.setState({
+              winInfo: {
+                whichPlayer: 1,
+              },
+            });
           } else if (WonPlayer === 2) {
             console.log(this.props.secondPlayerName + " has won the game");
+            this.setState({
+              winInfo: {
+                whichPlayer: 2,
+              },
+            });
           } else {
             console.log("Game is a tie");
+            this.setState({
+              winInfo: {
+                whichPlayer: -1,
+              },
+            });
           }
         } else {
           this.setState({ gameIsLive: true });
         }
 
         this.setState({
-          currentPlayer: { play: !this.state.currentPlayer.play },
+          currentPlayer: {
+            ...this.state.currentPlayer,
+            play: !this.state.currentPlayer.play,
+          },
           board: [...copyBoard],
         });
       }
     }
   };
 
+  showWinModal = (name) => {
+    Modal.success({
+      content: `${name} has won the Game`,
+    });
+  };
+
+  showTieModal = () => {
+    Modal.info({
+      content: "Well Played. It's a tie.",
+    });
+  };
+
   handleReset = () => {
     let number = this.state.gameNumber + 1;
     this.setState({
       gameNumber: number,
+      winInfo: { whichPlayer: 0 },
       gameIsLive: true,
       winningCells: {},
       board: Array.from(Array(this.props.rows), () =>
@@ -88,7 +120,6 @@ export class Grid extends Component {
   };
 
   render() {
-    console.log(this.state.winningCells);
     const gridBoardTop = [...new Array(this.props.columns)].map(
       (girdRow, index) => (
         <div
@@ -171,6 +202,14 @@ export class Grid extends Component {
           </button>
           <span className="status"></span>
         </div>
+
+        {this.state.winInfo.whichPlayer === 1
+          ? this.showWinModal(this.props.firstPlayerName)
+          : this.state.winInfo.whichPlayer === 2
+          ? this.showWinModal(this.props.secondPlayerName)
+          : this.state.winInfo.whichPlayer === -1
+          ? this.showTieModal()
+          : null}
       </div>
     );
   }
