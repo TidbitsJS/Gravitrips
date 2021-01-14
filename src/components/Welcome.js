@@ -92,7 +92,7 @@ export class Welcome extends Component {
               <InputNumber
                 type="number"
                 min={4}
-                max={20}
+                max={15}
                 defaultValue={4}
                 value={this.state.rows}
                 onChange={this.gridRowInput}
@@ -103,7 +103,7 @@ export class Welcome extends Component {
               <InputNumber
                 type="number"
                 min={4}
-                max={20}
+                max={6}
                 defaultValue={4}
                 value={this.state.dots}
                 onChange={this.gridDotInput}
@@ -114,7 +114,7 @@ export class Welcome extends Component {
               <InputNumber
                 type="number"
                 min={4}
-                max={20}
+                max={15}
                 defaultValue={4}
                 value={this.state.columns}
                 onChange={this.gridColInput}

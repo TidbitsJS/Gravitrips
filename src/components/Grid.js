@@ -19,10 +19,31 @@ export class Grid extends Component {
     },
     gameIsLive: true,
     winningCells: {},
+    lastEmptyPair: null,
+    currentColumn: null,
+    playerColors: {
+      1: this.props.firstPlayerColor,
+      2: this.props.secondPlayerColor,
+    },
 
     board: Array.from(Array(this.props.rows), () =>
       Array.from({ length: this.props.columns }, (_, i) => 0)
     ),
+  };
+
+  lastBall = (rowIndex, colIndex) => {
+    let board = this.state.board;
+    let lastEmpty = 0;
+
+    for (var i = this.props.rows - 1; i >= 0; i--) {
+      lastEmpty = i;
+
+      if (board[i][colIndex] === 0) {
+        break;
+      }
+    }
+
+    return lastEmpty;
   };
 
   handleCellClick = (e, rowIndex, colIndex) => {
@@ -31,19 +52,17 @@ export class Grid extends Component {
         let copyBoard = this.state.board;
         let PlayerID;
 
-        this.state.currentPlayer.play
-          ? (copyBoard[rowIndex][colIndex] = 1)
-          : (copyBoard[rowIndex][colIndex] = 2);
+        let lastEmptyBall = this.lastBall(rowIndex, colIndex);
 
         this.state.currentPlayer.play
-          ? (e.target.style.background = this.props.firstPlayerColor)
-          : (e.target.style.background = this.props.secondPlayerColor);
+          ? (copyBoard[lastEmptyBall][colIndex] = 1)
+          : (copyBoard[lastEmptyBall][colIndex] = 2);
 
         this.state.currentPlayer.play ? (PlayerID = 1) : (PlayerID = 2);
 
         let gameStatus = checkStatusOfGame(
           this.state.board,
-          rowIndex,
+          lastEmptyBall,
           colIndex,
           PlayerID,
           e.target,
@@ -51,52 +70,62 @@ export class Grid extends Component {
           this.props.columns
         );
 
-        const { isWin, winningDimensions, WonPlayer } = gameStatus;
+        const { isWin, winningDimensions, wonPlayer } = gameStatus;
 
-        if (isWin) {
-          this.setState({
-            gameIsLive: false,
+        this.setState(
+          {
+            currentPlayer: {
+              ...this.state.currentPlayer,
+              play: !this.state.currentPlayer.play,
+            },
+            gameIsLive: !isWin,
             winningCells: winningDimensions,
-          });
-
-          if (WonPlayer === 1) {
-            console.log(this.props.firstPlayerName + " has won the game");
-            this.setState({
-              winInfo: {
-                whichPlayer: 1,
-              },
-            });
-          } else if (WonPlayer === 2) {
-            console.log(this.props.secondPlayerName + " has won the game");
-            this.setState({
-              winInfo: {
-                whichPlayer: 2,
-              },
-            });
-          } else {
-            console.log("Game is a tie");
-            this.setState({
-              winInfo: {
-                whichPlayer: -1,
-              },
-            });
-          }
-        } else {
-          this.setState({ gameIsLive: true });
-        }
-
-        this.setState({
-          currentPlayer: {
-            ...this.state.currentPlayer,
-            play: !this.state.currentPlayer.play,
+            winInfo: { whichPlayer: wonPlayer },
+            board: [...copyBoard],
           },
-          board: [...copyBoard],
-        });
+          () => {
+            if (isWin) {
+              wonPlayer === -1 ? this.showTieModal() : this.showWinModal();
+            }
+          }
+        );
       }
     }
   };
 
-  showWinModal = (winner, loser) => {
+  handleMouseOver = (column) => {
+    if (!this.state.winInfo.whichPlayer) {
+      this.setState({ currentColumn: column });
+    }
+  };
+
+  handleMouseOut = () => {
+    this.setState({ currentColumn: null });
+  };
+
+  handleBoardTopMouseOver = (e, column) => {
+    e.target.style.background = this.state.currentPlayer.play
+      ? this.props.firstPlayerColor
+      : this.props.secondPlayerColor;
+  };
+
+  handleBoardTopMouseOut = (e) => {
+    e.target.style.background = "#fff";
+    if (!this.state.winInfo.whichPlayer) {
+      this.setState({ currentColumn: null });
+    }
+  };
+
+  showWinModal = () => {
+    console.log(this.state.winInfo);
+    let winner =
+      this.state.winInfo.whichPlayer === 1
+        ? this.props.firstPlayerName
+        : this.props.secondPlayerName;
+    let loser =
+      this.state.winInfo.whichPlayer === 1
+        ? this.props.secondPlayerName
+        : this.props.firstPlayerName;
     Modal.success({
       title: <h3>Congrats {winner}</h3>,
       content: (
@@ -142,6 +171,7 @@ export class Grid extends Component {
 
   render() {
     const { width, height } = useWindowSize;
+    let { board, playerColors } = this.state;
 
     const gridBoardTop = [...new Array(this.props.columns)].map(
       (girdRow, index) => (
@@ -149,15 +179,23 @@ export class Grid extends Component {
           className={`cell row-top col-${index} top`}
           key={index + `cell row-top col-${index} top`}
           onMouseOver={(e) =>
-            (e.target.style.color = this.props.firstPlayerColor)
+            (e.target.style.color = this.state.currentPlayer.play
+              ? this.props.firstPlayerColor
+              : this.props.secondPlayerColor)
           }
         >
           <div
             className="ball"
-            onMouseOver={(e) =>
-              (e.target.style.background = this.props.firstPlayerColor)
-            }
-            onMouseOut={(e) => (e.target.style.background = "#fff")}
+            style={{
+              backgroundColor:
+                this.state.currentColumn === index
+                  ? this.state.currentPlayer.play
+                    ? this.props.firstPlayerColor
+                    : this.props.secondPlayerColor
+                  : "#fff",
+            }}
+            onMouseOver={(e) => this.handleBoardTopMouseOver(e, index)}
+            onMouseOut={(e) => this.handleBoardTopMouseOut(e)}
           ></div>
         </div>
       )
@@ -177,7 +215,12 @@ export class Grid extends Component {
           <div
             key={`cell row-${ri} col-${ci} top-border-ball`}
             className="ball"
+            style={{
+              backgroundColor: playerColors[board[ri][ci]],
+            }}
             onClick={(e) => this.handleCellClick(e, ri, ci)}
+            onMouseOver={(e) => this.handleMouseOver(ci)}
+            onMouseOut={(e) => this.handleMouseOver()}
           ></div>
         </div>
       ));
@@ -211,7 +254,7 @@ export class Grid extends Component {
             gridTemplateRows: `repeat(${this.props.rows}, 1fr)`,
           }}
         >
-          {/* {gridBoardTop} */}
+          {gridBoardTop}
 
           {cellBoard}
         </div>
@@ -226,21 +269,9 @@ export class Grid extends Component {
           <span className="status"></span>
         </div>
 
-        {this.state.winInfo.whichPlayer === 1
-          ? this.showWinModal(
-              this.props.firstPlayerName,
-              this.props.secondPlayerName
-            )
-          : this.state.winInfo.whichPlayer === 2
-          ? this.showWinModal(
-              this.props.secondPlayerName,
-              this.props.firstPlayerName
-            )
-          : this.state.winInfo.whichPlayer === -1
-          ? this.showTieModal()
-          : null}
-
-        {this.state.gameIsLive ? null : (
+        {this.state.gameIsLive ? (
+          " "
+        ) : (
           <Confetti width={width} height={height} />
         )}
       </div>

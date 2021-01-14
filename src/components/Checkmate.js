@@ -3,10 +3,6 @@ const checkWinningCells = (winnningCells, winningDimensions, cell) => {
 
   console.log("WinningDimensions", winningDimensions);
 
-  let parent = cell.parentNode;
-
-  parent.style.background = "#fff";
-
   console.log("Win Win Win", cell.parentNode);
   return true;
 };
@@ -65,7 +61,7 @@ export const checkStatusOfGame = (
     return {
       isWin: true,
       winningDimensions: winningDimensions,
-      WonPlayer: player,
+      wonPlayer: player,
     };
 
   /* Check Vertically */
@@ -106,7 +102,7 @@ export const checkStatusOfGame = (
     return {
       isWin: true,
       winningDimensions: winningDimensions,
-      WonPlayer: player,
+      wonPlayer: player,
     };
 
   /* Check diagonally right */
@@ -150,7 +146,7 @@ export const checkStatusOfGame = (
     return {
       isWin: true,
       winningDimensions: winningDimensions,
-      WonPlayer: player,
+      wonPlayer: player,
     };
 
   /* Check diagonally left */
@@ -194,7 +190,7 @@ export const checkStatusOfGame = (
     return {
       isWin: isWinningCombo,
       winningDimensions: winningDimensions,
-      WonPlayer: player,
+      wonPlayer: player,
     };
 
   for (const row of board) {
