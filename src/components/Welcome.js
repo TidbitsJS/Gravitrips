@@ -1,74 +1,45 @@
 import React, { Component } from "react";
-import { InputNumber, Button, Input } from "antd";
-import { SketchPicker } from "react-color";
+import { InputNumber, Button, Input, Select } from "antd";
 
 import "antd/dist/antd.css";
 import Grid from "./Grid";
 
+const { Option } = Select;
+
 export class Welcome extends Component {
   state = {
-    rows: 7,
-    columns: 7,
+    rows: 4,
+    columns: 4,
     dots: 4,
     start: false,
     firstPlayer: {
       name: "Mr. Red",
-      color: "red",
+      color: "#ff0000",
     },
     secondPlayer: {
       name: "Mr. Green",
-      color: "green",
+      color: "#98FB98",
     },
-    displayFirstColorPicker: false,
-    displaySecondColorPicker: false,
   };
 
   gridRowInput = (value) => {
+    if (value % 1 !== 0) return;
+
     this.setState({ rows: value });
   };
 
   gridColInput = (value) => {
+    if (value % 1 !== 0) return;
     this.setState({ columns: value });
   };
 
   gridDotInput = (value) => {
+    if (value % 1 !== 0) return;
     this.setState({ dots: value });
   };
 
   handleStart = () => {
     this.setState({ start: true });
-  };
-
-  handleFirstClick = () => {
-    this.setState({
-      displayFirstColorPicker: !this.state.displayFirstColorPicker,
-    });
-  };
-
-  handleSecondClick = () => {
-    this.setState({
-      displaySecondColorPicker: !this.state.displaySecondColorPicker,
-    });
-  };
-
-  handleFirstClose = () => {
-    this.setState({ displayFirstColorPicker: false });
-  };
-
-  handleSecondClose = () => {
-    this.setState({ displaySecondColorPicker: false });
-  };
-
-  handleFirstChange = (color) => {
-    this.setState({
-      firstPlayer: { name: this.state.firstPlayer.name, color: color.hex },
-    });
-  };
-
-  handleSecondChange = (color) => {
-    this.setState({
-      secondPlayer: { name: this.state.secondPlayer.name, color: color.hex },
-    });
   };
 
   onFirstPlayerNameChange = (e) => {
@@ -89,51 +60,23 @@ export class Welcome extends Component {
     });
   };
 
-  render() {
-    const styles = {
-      firstColor: {
-        width: "36px",
-        height: "14px",
-        borderRadius: "2px",
-        background: `${this.state.firstPlayer.color}`,
-      },
-      secondColor: {
-        width: "36px",
-        height: "14px",
-        borderRadius: "2px",
-        background: `${this.state.secondPlayer.color}`,
-      },
-      swatch: {
-        padding: "5px",
-        background: "#fff",
-        borderRadius: "1px",
-        boxShadow: "0 0 0 1px rgba(0,0,0,.1)",
-        display: "inline-block",
-        cursor: "pointer",
-      },
-      popoverFirst: {
-        position: "absolute",
-        top: "-100%",
-        left: "-10%",
-        transform: "translate(-100%, -40%)",
-        zIndex: "2",
-      },
-      popoverSecond: {
-        position: "absolute",
-        top: "-100%",
-        left: "40%",
-        transform: "translate(100%, -40%)",
-        zIndex: "2",
-      },
-      cover: {
-        position: "fixed",
-        top: "0px",
-        right: "0px",
-        bottom: "0px",
-        left: "0px",
-      },
-    };
+  onFirstPlayerColorChange = (value) => {
+    console.log(value);
 
+    this.setState({
+      firstPlayer: { ...this.state.firstPlayer, color: value },
+    });
+  };
+
+  onSecondPlayerColorChange = (value) => {
+    console.log(value);
+
+    this.setState({
+      secondPlayer: { ...this.state.secondPlayer, color: value },
+    });
+  };
+
+  render() {
     if (!this.state.start) {
       return (
         <div className="App">
@@ -147,27 +90,33 @@ export class Welcome extends Component {
             <div className="Grid-Row-UserInput glass">
               <p>Enter Rows: </p>
               <InputNumber
+                type="number"
                 min={4}
                 max={20}
                 defaultValue={4}
+                value={this.state.rows}
                 onChange={this.gridRowInput}
               />
             </div>
             <div className="Grid-dot-UserInput glass">
               <p>Enter Dots: </p>
               <InputNumber
+                type="number"
                 min={4}
                 max={20}
                 defaultValue={4}
+                value={this.state.dots}
                 onChange={this.gridDotInput}
               />
             </div>
             <div className="Grid-Col-UserInput glass">
               <p>Enter Columns: </p>
               <InputNumber
+                type="number"
                 min={4}
                 max={20}
                 defaultValue={4}
+                value={this.state.columns}
                 onChange={this.gridColInput}
               />
             </div>
@@ -193,34 +142,78 @@ export class Welcome extends Component {
           <div className="Grid-ColorChoice">
             <div className="Grid-FirstPlayer-ColorChoice glass">
               <p>FirstPlayer Color:</p>
-              <div style={styles.swatch} onClick={this.handleFirstClick}>
-                <div style={styles.firstColor} />
-              </div>
-              {this.state.displayFirstColorPicker ? (
-                <div style={styles.popoverFirst}>
-                  <div style={styles.cover} onClick={this.handleFirstClose} />
-                  <SketchPicker
-                    color={this.state.firstPlayer.color}
-                    onChange={this.handleFirstChange}
-                  />
-                </div>
-              ) : null}
+              <Select
+                defaultValue="#ff0000"
+                style={{ width: 110 }}
+                onChange={this.onFirstPlayerColorChange}
+              >
+                <Option value="#0ec74f">
+                  Green{" "}
+                  <i
+                    className="fas fa-circle"
+                    style={{ marginLeft: 5, color: "#0ec74f" }}
+                  ></i>
+                </Option>
+                <Option value="#ff0000">
+                  Red{" "}
+                  <i
+                    className="fas fa-circle"
+                    style={{ marginLeft: 5, color: "#ff0000 " }}
+                  ></i>
+                </Option>
+                <Option value="#ffc200">
+                  Yellow{" "}
+                  <i
+                    className="fas fa-circle"
+                    style={{ marginLeft: 5, color: "#ffc200" }}
+                  ></i>
+                </Option>
+                <Option value="#0092fa">
+                  Blue{" "}
+                  <i
+                    className="fas fa-circle"
+                    style={{ marginLeft: 5, color: "#0092fa" }}
+                  ></i>
+                </Option>
+              </Select>
             </div>
 
             <div className="Grid-SecondPlayer-ColorChoice glass">
               <p>SecondPlayer Color:</p>
-              <div style={styles.swatch} onClick={this.handleSecondClick}>
-                <div style={styles.secondColor} />
-              </div>
-              {this.state.displaySecondColorPicker ? (
-                <div style={styles.popoverSecond}>
-                  <div style={styles.cover} onClick={this.handleSecondClose} />
-                  <SketchPicker
-                    color={this.state.secondPlayer.color}
-                    onChange={this.handleSecondChange}
-                  />
-                </div>
-              ) : null}
+              <Select
+                defaultValue="#98FB98"
+                style={{ width: 110 }}
+                onChange={this.onSecondPlayerColorChange}
+              >
+                <Option value="#EB7405">
+                  Tango{" "}
+                  <i
+                    className="fas fa-circle"
+                    style={{ marginLeft: 5, color: "#EB7405" }}
+                  ></i>
+                </Option>
+                <Option value="#98FB98">
+                  Mint{" "}
+                  <i
+                    className="fas fa-circle"
+                    style={{ marginLeft: 5, color: "#98FB98 " }}
+                  ></i>
+                </Option>
+                <Option value="#00EAFF">
+                  Aqua{" "}
+                  <i
+                    className="fas fa-circle"
+                    style={{ marginLeft: 5, color: "#00EAFF" }}
+                  ></i>
+                </Option>
+                <Option value="#FF5999">
+                  Rose{" "}
+                  <i
+                    className="fas fa-circle"
+                    style={{ marginLeft: 5, color: "#FF5999" }}
+                  ></i>
+                </Option>
+              </Select>
             </div>
           </div>
 
