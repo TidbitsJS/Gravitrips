@@ -32,6 +32,10 @@ h1 {
   font-size: 1.3rem;
 }
 
+.Player-Turn p {
+  margin-bottom: 0;
+}
+
 .game-board {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -49,13 +53,13 @@ h1 {
   background: #4370f1;
   background: #000;
 
-  height: 85px;
-  width: 85px;
+  height: 10vw;
+  width: 10vw;
 }
 
 .ball {
-  width: 45px;
-  height: 45px;
+  width: 5vw;
+  height: 5vw;
 
   border-radius: 50%;
   background: #fff;

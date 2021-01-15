@@ -1,35 +1,58 @@
 import React, { Component } from "react";
 import { Modal } from "antd";
 import Confetti from "react-confetti";
-import { useWindowSize } from "react-use";
 import { checkStatusOfGame } from "./Checkmate";
 
 export class Grid extends Component {
-  state = {
-    currentPlayer: {
-      play: true,
-    },
-    nextPlayer: {
-      play: false,
-    },
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentPlayer: {
+        play: true,
+      },
 
-    gameNumber: 0,
-    winInfo: {
-      whichPlayer: 0,
-    },
-    gameIsLive: true,
-    winningCells: {},
-    lastEmptyPair: null,
-    currentColumn: null,
-    playerColors: {
-      1: this.props.firstPlayerColor,
-      2: this.props.secondPlayerColor,
-    },
+      width: null,
+      height: null,
 
-    board: Array.from(Array(this.props.rows), () =>
-      Array.from({ length: this.props.columns }, (_, i) => 0)
-    ),
-  };
+      nextPlayer: {
+        play: false,
+      },
+
+      gameNumber: 0,
+      winInfo: {
+        whichPlayer: 0,
+      },
+
+      gameIsLive: true,
+      winningCells: {},
+      lastEmptyPair: null,
+      currentColumn: null,
+
+      playerColors: {
+        1: this.props.firstPlayerColor,
+        2: this.props.secondPlayerColor,
+      },
+
+      board: Array.from(Array(this.props.rows), () =>
+        Array.from({ length: this.props.columns }, (_, i) => 0)
+      ),
+    };
+
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+  }
+
+  componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener("resize", this.updateWindowDimensions);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions() {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
+  }
 
   lastBall = (rowIndex, colIndex) => {
     let board = this.state.board;
@@ -170,7 +193,6 @@ export class Grid extends Component {
   };
 
   render() {
-    const { width, height } = useWindowSize;
     let { board, playerColors } = this.state;
 
     const gridBoardTop = [...new Array(this.props.columns)].map(
@@ -272,7 +294,7 @@ export class Grid extends Component {
         {this.state.gameIsLive ? (
           " "
         ) : (
-          <Confetti width={width} height={height} />
+          <Confetti width={this.state.width - 30} height={this.state.height} />
         )}
       </div>
     );
