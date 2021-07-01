@@ -25,7 +25,6 @@ export class Grid extends Component {
 
       gameIsLive: true,
       winningCells: {},
-      lastEmptyPair: null,
       currentColumn: null,
 
       playerColors: {
@@ -38,21 +37,21 @@ export class Grid extends Component {
       ),
     };
 
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    // this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.updateWindowDimensions();
     window.addEventListener("resize", this.updateWindowDimensions);
-  }
+  };
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     window.removeEventListener("resize", this.updateWindowDimensions);
-  }
+  };
 
-  updateWindowDimensions() {
+  updateWindowDimensions = () => {
     this.setState({ width: window.innerWidth, height: window.innerHeight });
-  }
+  };
 
   lastBall = (rowIndex, colIndex) => {
     let board = this.state.board;
@@ -104,6 +103,7 @@ export class Grid extends Component {
             gameIsLive: !isWin,
             winningCells: winningDimensions,
             winInfo: { whichPlayer: wonPlayer },
+            currentColumn: null,
             board: [...copyBoard],
           },
           () => {
@@ -186,6 +186,7 @@ export class Grid extends Component {
       winInfo: { whichPlayer: 0 },
       gameIsLive: true,
       winningCells: {},
+      currentColumn: null,
       board: Array.from(Array(this.props.rows), () =>
         Array.from({ length: this.props.columns }, (_, i) => 0)
       ),
